@@ -49,8 +49,18 @@ const MovieBanner = ({ data, index, leaving, onIncreaseIndex, onBoxClicked, onTo
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${getImageUrl(data?.results[0].backdrop_path || "", "original")})`
         }}
       >
-        <h2 className="text-6xl mb-5 text-white font-light">{data?.results[0].title}</h2>
-        <p className="text-3xl w-1/2 text-white font-light">{data?.results[0].overview}</p>
+        <h2 
+          className="text-6xl mb-5 text-white font-light cursor-pointer hover:text-gray-300 transition-colors"
+          onClick={() => onBoxClicked(data?.results[0].id)}
+        >
+          {data?.results[0].title}
+        </h2>
+        <p 
+          className="text-3xl w-1/2 text-white font-light line-clamp-4 cursor-pointer hover:text-gray-300 transition-colors"
+          onClick={() => onBoxClicked(data?.results[0].id)}
+        >
+          {data?.results[0].overview}
+        </p>
       </div>
       
       <div className="relative -top-24">

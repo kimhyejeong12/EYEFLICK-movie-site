@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useEffect } from 'react';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Home from './pages/Home/Home';
@@ -8,10 +9,22 @@ import SearchResults from './pages/Search/SearchResults';
 
 const queryClient = new QueryClient();
 
+// 경로 변경 시 상단으로 스크롤하는 컴포넌트
+function ScrollToTop() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  
+  return null;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <ScrollToTop />
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1">
