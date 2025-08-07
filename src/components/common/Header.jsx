@@ -3,6 +3,7 @@ import { motion, useAnimation, useScroll } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import NavButton from "./NavButton";
+import EyeIcon from "./EyeIcon";
 
 const navItems = [
   { label: '홈', path: '/' },
@@ -66,7 +67,7 @@ function Header() {
     >
       <div className="flex items-center">
         <motion.div
-          className="mr-12 text-2xl font-bold text-purple-600 cursor-pointer"
+          className="mr-12 flex items-center gap-2 cursor-pointer"
           variants={{
             normal: { opacity: 1 },
             active: { 
@@ -78,7 +79,8 @@ function Header() {
           animate="normal"
           onClick={() => navigate('/')}
         >
-          EYEFLICK
+          <EyeIcon />
+          <span className="text-2xl font-bold text-purple-600">EYEFLICK</span>
         </motion.div>
         
         <ul className="flex items-center gap-5">
