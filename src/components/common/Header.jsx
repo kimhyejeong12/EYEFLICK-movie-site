@@ -65,7 +65,7 @@ function Header() {
     >
       <div className="flex items-center">
         <motion.div
-          className="mr-12 text-2xl font-bold text-purple-600"
+          className="mr-12 text-2xl font-bold text-purple-600 cursor-pointer"
           variants={{
             normal: { opacity: 1 },
             active: { 
@@ -75,6 +75,7 @@ function Header() {
           }}
           whileHover="active"
           animate="normal"
+          onClick={() => navigate('/')}
         >
           EYEFLICK
         </motion.div>
