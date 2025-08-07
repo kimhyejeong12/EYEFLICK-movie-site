@@ -1,20 +1,25 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './layout/Layout';
-import Home from './pages/Home';
-import MovieList from './pages/MovieList';
-import MovieDetail from './pages/MovieDetail';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import Header from './components/common/Header';
+import Home from './pages/Home/Home';
+import MovieDetail from './pages/Movie/MovieDetail';
+import SearchResults from './pages/Search/SearchResults';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path='movies/:category' element={<MovieList />} />
-        </Route>
-        <Route path="/movie/:movieId" element={<MovieDetail />} />
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='movies/:category' element={<Home />} />
+          <Route path="/movie/:movieId" element={<MovieDetail />} />
+          <Route path="/search" element={<SearchResults />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
