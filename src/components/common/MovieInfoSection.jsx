@@ -1,6 +1,12 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 const MovieInfoSection = ({ movie, credits }) => {
+  const [showFullOverview, setShowFullOverview] = useState(false);
+  
+  const overview = movie?.overview || "";
+  const isLongOverview = overview.length > 300; // 상세 페이지에서는 더 긴 텍스트 허용
+  
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex flex-col gap-6 md:flex-row">
@@ -14,7 +20,29 @@ const MovieInfoSection = ({ movie, credits }) => {
         
         <div className="flex-1 text-white">
           <h1 className="text-4xl font-bold mb-4 text-white">{movie.title}</h1>
-          <p className="text-base leading-relaxed text-gray-300 mb-6 line-clamp-4">{movie.overview}</p>
+          <div className="mb-6">
+            <p className="text-base leading-relaxed text-gray-300 line-clamp-4">{overview}</p>
+            {isLongOverview && (
+              <div className="mt-2">
+                <button
+                  onClick={() => setShowFullOverview(!showFullOverview)}
+                  className="text-purple-400 hover:text-purple-300 text-sm underline"
+                >
+                  {showFullOverview ? "접기" : "더보기"}
+                </button>
+              </div>
+            )}
+            {showFullOverview && isLongOverview && (
+              <motion.p
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="text-base leading-relaxed text-gray-300 mt-2"
+              >
+                {overview}
+              </motion.p>
+            )}
+          </div>
           
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-white bg-opacity-10 p-3 rounded-lg backdrop-blur-sm">
