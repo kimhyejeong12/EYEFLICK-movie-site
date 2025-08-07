@@ -9,7 +9,6 @@ const navItems = [
   { label: '인기 영화', path: '/movies/popular' },
   { label: '평점 높은', path: '/movies/top_rated' },
   { label: '상영 중', path: '/movies/now_playing' },
-  { label: 'TV 프로그램', path: '/tv' },
   { label: '인기 TV', path: '/tv/popular' },
   { label: '평점 높은 TV', path: '/tv/top_rated' }
 ];
