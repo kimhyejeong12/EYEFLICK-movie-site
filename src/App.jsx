@@ -6,6 +6,7 @@ import Footer from './components/common/Footer';
 import Home from './pages/Home/Home';
 import MovieDetail from './pages/Movie/MovieDetail';
 import SearchResults from './pages/Search/SearchResults';
+import TvDetail from './pages/Tv/TvDetail';
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,8 @@ function App() {
               <Route path='movies/:category' element={<Home />} />
               <Route path="/movie/:movieId" element={<MovieDetail />} />
               <Route path="/search" element={<SearchResults />} />
+              <Route path="/tv/:category" element={<Home />} />
+              <Route path="/tv-detail/:tvId" element={<TvDetail />} />
             </Routes>
           </main>
           <Footer />
