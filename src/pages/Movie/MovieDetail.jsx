@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import TrailerSection from '../../components/common/TrailerSection';
 import MovieInfoSection from '../../components/common/MovieInfoSection';
+import ReviewsSection from '../../components/common/ReviewsSection';
 import RecommendationsSection from '../../components/common/RecommendationsSection';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -87,6 +88,7 @@ const MovieDetail = () => {
     <div className="bg-black min-h-screen pt-20">
       <TrailerSection videos={videos} />
       <MovieInfoSection movie={movie} credits={credits} />
+      <ReviewsSection movieId={movieId} />
       <RecommendationsSection recommendations={recommendations} />
     </div>
   );
