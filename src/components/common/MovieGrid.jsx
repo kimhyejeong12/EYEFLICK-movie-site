@@ -55,7 +55,7 @@ const MovieGrid = ({ category, title, page = 1, onPageChange }) => {
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-              {movies.map(movie => (
+              {movies.slice(0, 18).map(movie => (
                 <div key={movie.id} className="group">
                   <Link to={`/movie/${movie.id}`}>
                     <div className="relative overflow-hidden rounded-md transition-transform duration-300 group-hover:scale-105 group-hover:z-10">
