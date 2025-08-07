@@ -2,45 +2,54 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { motion } from 'framer-motion';
 
+const BASE_PATH = "https://api.themoviedb.org/3";
+
 const ReviewsSection = ({ data, type = "movie" }) => {
   const [expandedReviews, setExpandedReviews] = useState(new Set());
   const [showAllReviews, setShowAllReviews] = useState(false);
   
   const itemId = data?.id;
-  const reviews = data?.reviews?.results || [];
-
-  const { data: fetchedReviews = [], isLoading: loading, error } = useQuery(
+  const existingReviews = data?.reviews?.results || [];
+  
+  const { data: fetchedReviews = [], isLoading, error } = useQuery(
     ['reviews', itemId, type],
     async () => {
-      if (data?.reviews?.results) {
-        return data.reviews.results.slice(0, 6);
-      }
-      
       const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
       const endpoint = type === "tv" ? "tv" : "movie";
       
-      let response = await fetch(
-        `https://api.themoviedb.org/3/${endpoint}/${itemId}/reviews?api_key=${API_KEY}&language=ko&page=1`
-      );
-      let responseData = await response.json();
+      // 한국어와 영어 리뷰 병렬로 가져오기
+      const [koResponse, enResponse] = await Promise.all([
+        fetch(`${BASE_PATH}/${endpoint}/${itemId}/reviews?api_key=${API_KEY}&language=ko&page=1`),
+        fetch(`${BASE_PATH}/${endpoint}/${itemId}/reviews?api_key=${API_KEY}&language=en&page=1`)
+      ]);
       
-      if (!responseData.results || responseData.results.length < 3) {
-        response = await fetch(
-          `https://api.themoviedb.org/3/${endpoint}/${itemId}/reviews?api_key=${API_KEY}&language=en&page=1`
-        );
-        responseData = await response.json();
-      }
+      const [koData, enData] = await Promise.all([
+        koResponse.json(),
+        enResponse.json()
+      ]);
       
-      return responseData.results ? responseData.results.slice(0, 6) : [];
+      const koreanReviews = koData.results || [];
+      const englishReviews = enData.results || [];
+      
+      // 중복 제거 후 합치기
+      const allReviews = [...koreanReviews];
+      englishReviews.forEach(enReview => {
+        if (!allReviews.find(krReview => krReview.id === enReview.id)) {
+          allReviews.push(enReview);
+        }
+      });
+      
+      return allReviews.slice(0, 10);
     },
     {
-      enabled: !!itemId && !data?.reviews?.results,
+      enabled: !!itemId && existingReviews.length < 3,
       staleTime: 5 * 60 * 1000,
       cacheTime: 10 * 60 * 1000,
     }
   );
 
-  const finalReviews = reviews.length > 0 ? reviews : fetchedReviews;
+  const finalReviews = existingReviews.length > 0 ? existingReviews : fetchedReviews;
+  const displayedReviews = showAllReviews ? finalReviews : finalReviews.slice(0, 2);
 
   const toggleReviewExpansion = (reviewId) => {
     setExpandedReviews(prev => {
@@ -64,28 +73,49 @@ const ReviewsSection = ({ data, type = "movie" }) => {
   };
 
   const truncateText = (text, maxLength = 200) => {
-    if (text.length <= maxLength) return text;
+    if (!text || text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
 
-  const renderEmptyState = (message) => (
-    <div className="max-w-6xl mx-auto p-10">
-      <h2 className="text-3xl font-bold mb-5 text-white">리뷰</h2>
-      <div className="text-center text-gray-400 text-lg mb-10 py-8">
-        {message}
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto p-10">
+        <h2 className="text-3xl font-bold mb-5 text-white">리뷰</h2>
+        <div className="text-center text-gray-400 text-lg mb-10 py-8">
+          리뷰를 불러오는 중...
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 
-  if (loading) return renderEmptyState('리뷰를 불러오는 중...');
-  if (error) return renderEmptyState('리뷰를 불러오는 데 실패했습니다.');
-  if (!finalReviews || finalReviews.length === 0) return renderEmptyState(`이 ${type === "tv" ? "TV 프로그램" : "영화"}의 리뷰를 찾을 수 없습니다.`);
+  if (error) {
+    return (
+      <div className="max-w-6xl mx-auto p-10">
+        <h2 className="text-3xl font-bold mb-5 text-white">리뷰</h2>
+        <div className="text-center text-gray-400 text-lg mb-10 py-8">
+          리뷰를 불러오는 데 실패했습니다.
+        </div>
+      </div>
+    );
+  }
 
-  const displayedReviews = showAllReviews ? finalReviews : finalReviews.slice(0, 2);
+  if (!finalReviews || finalReviews.length === 0) {
+    return (
+      <div className="max-w-6xl mx-auto p-10">
+        <h2 className="text-3xl font-bold mb-5 text-white">리뷰</h2>
+        <div className="text-center text-gray-400 text-lg mb-10 py-8">
+          이 {type === "tv" ? "TV 프로그램" : "영화"}의 리뷰를 찾을 수 없습니다.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-10">
-      <h2 className="text-3xl font-bold mb-5 text-white">리뷰</h2>
+      <h2 className="text-3xl font-bold mb-5 text-white">
+        리뷰 ({finalReviews.length}개)
+      </h2>
+      
       <div className="grid gap-4 mb-10">
         {displayedReviews.map((review, index) => (
           <motion.div
@@ -105,9 +135,18 @@ const ReviewsSection = ({ data, type = "movie" }) => {
                 <div>
                   <h3 className="text-white font-semibold text-sm">{review.author}</h3>
                   <p className="text-gray-400 text-xs">{formatDate(review.created_at)}</p>
+                  {review.iso_639_1 && (
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      review.iso_639_1 === 'ko'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-green-500 text-white'
+                    }`}>
+                      {review.iso_639_1 === 'ko' ? '한국어' : 'English'}
+                    </span>
+                  )}
                 </div>
               </div>
-              {review.author_details.rating && (
+              {review.author_details?.rating && (
                 <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
                   ⭐ {review.author_details.rating}/10
                 </div>
@@ -130,7 +169,7 @@ const ReviewsSection = ({ data, type = "movie" }) => {
                   <p className="whitespace-pre-wrap">
                     {truncateText(review.content)}
                   </p>
-                  {review.content.length > 200 && (
+                  {review.content && review.content.length > 200 && (
                     <button
                       onClick={() => toggleReviewExpansion(review.id)}
                       className="text-purple-400 hover:text-purple-300 mt-2 text-xs font-medium transition-colors"
@@ -143,27 +182,27 @@ const ReviewsSection = ({ data, type = "movie" }) => {
             </div>
           </motion.div>
         ))}
-        
-        {finalReviews.length > 2 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex justify-center mt-4"
-          >
-            <button
-              onClick={() => setShowAllReviews(!showAllReviews)}
-              className={`px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-lg ${
-                showAllReviews
-                  ? 'bg-white bg-opacity-10 text-white hover:bg-opacity-20 border border-white border-opacity-20'
-                  : 'bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700'
-              }`}
-            >
-              {showAllReviews ? '접기' : '더보기'}
-            </button>
-          </motion.div>
-        )}
       </div>
+      
+      {finalReviews.length > 2 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex justify-center mt-4"
+        >
+          <button
+            onClick={() => setShowAllReviews(!showAllReviews)}
+            className={`px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-lg ${
+              showAllReviews
+                ? 'bg-white bg-opacity-10 text-white hover:bg-opacity-20 border border-white border-opacity-20'
+                : 'bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:from-purple-600 hover:to-purple-700'
+            }`}
+          >
+            {showAllReviews ? '접기' : '더보기'}
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 };
