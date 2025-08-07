@@ -2,36 +2,45 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { motion } from 'framer-motion';
 
-const ReviewsSection = ({ movieId }) => {
+const ReviewsSection = ({ data, type = "movie" }) => {
   const [expandedReviews, setExpandedReviews] = useState(new Set());
   const [showAllReviews, setShowAllReviews] = useState(false);
+  
+  const itemId = data?.id;
+  const reviews = data?.reviews?.results || [];
 
-  const fetchReviews = async () => {
-    const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-    
-    let response = await fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${API_KEY}&language=ko&page=1`
-    );
-    let data = await response.json();
-    
-    if (!data.results || data.results.length < 3) {
-      response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${API_KEY}&language=en&page=1`
+  const { data: fetchedReviews = [], isLoading: loading, error } = useQuery(
+    ['reviews', itemId, type],
+    async () => {
+      if (data?.reviews?.results) {
+        return data.reviews.results.slice(0, 6);
+      }
+      
+      const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+      const endpoint = type === "tv" ? "tv" : "movie";
+      
+      let response = await fetch(
+        `https://api.themoviedb.org/3/${endpoint}/${itemId}/reviews?api_key=${API_KEY}&language=ko&page=1`
       );
-      data = await response.json();
-    }
-    
-    return data.results ? data.results.slice(0, 6) : [];
-  };
-
-  const { data: reviews = [], isLoading: loading, error } = useQuery(
-    ['reviews', movieId],
-    fetchReviews,
+      let responseData = await response.json();
+      
+      if (!responseData.results || responseData.results.length < 3) {
+        response = await fetch(
+          `https://api.themoviedb.org/3/${endpoint}/${itemId}/reviews?api_key=${API_KEY}&language=en&page=1`
+        );
+        responseData = await response.json();
+      }
+      
+      return responseData.results ? responseData.results.slice(0, 6) : [];
+    },
     {
+      enabled: !!itemId && !data?.reviews?.results,
       staleTime: 5 * 60 * 1000,
       cacheTime: 10 * 60 * 1000,
     }
   );
+
+  const finalReviews = reviews.length > 0 ? reviews : fetchedReviews;
 
   const toggleReviewExpansion = (reviewId) => {
     setExpandedReviews(prev => {
@@ -70,9 +79,9 @@ const ReviewsSection = ({ movieId }) => {
 
   if (loading) return renderEmptyState('리뷰를 불러오는 중...');
   if (error) return renderEmptyState('리뷰를 불러오는 데 실패했습니다.');
-  if (!reviews || reviews.length === 0) return renderEmptyState('이 영화의 리뷰를 찾을 수 없습니다.');
+  if (!finalReviews || finalReviews.length === 0) return renderEmptyState(`이 ${type === "tv" ? "TV 프로그램" : "영화"}의 리뷰를 찾을 수 없습니다.`);
 
-  const displayedReviews = showAllReviews ? reviews : reviews.slice(0, 2);
+  const displayedReviews = showAllReviews ? finalReviews : finalReviews.slice(0, 2);
 
   return (
     <div className="max-w-6xl mx-auto p-10">
@@ -135,7 +144,7 @@ const ReviewsSection = ({ movieId }) => {
           </motion.div>
         ))}
         
-        {reviews.length > 2 && (
+        {finalReviews.length > 2 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

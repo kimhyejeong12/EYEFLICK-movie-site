@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 
-const TrailerSection = ({ videos }) => {
+const TrailerSection = ({ data, type = "movie" }) => {
+  const videos = data?.videos?.results || [];
   return (
     <div className="max-w-6xl mx-auto p-10">
       <h2 className="text-3xl font-bold mb-5 text-white">예고편</h2>
@@ -28,7 +29,7 @@ const TrailerSection = ({ videos }) => {
         </div>
       ) : (
         <div className="text-center text-gray-400 text-lg mb-10 py-8">
-          이 영화의 예고편을 찾을 수 없습니다.
+          이 {type === "tv" ? "TV 프로그램" : "영화"}의 예고편을 찾을 수 없습니다.
         </div>
       )}
     </div>
