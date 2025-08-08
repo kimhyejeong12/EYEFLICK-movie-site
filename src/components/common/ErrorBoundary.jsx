@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-// BackButton 컴포넌트
 const BackButton = ({ onClick, children = "뒤로 가기" }) => (
   <button 
     onClick={onClick}
@@ -10,7 +9,6 @@ const BackButton = ({ onClick, children = "뒤로 가기" }) => (
   </button>
 );
 
-// ErrorState 컴포넌트
 const ErrorState = ({ message, onBackClick }) => (
   <div className="h-screen flex justify-center items-center bg-black text-white">
     <div className="text-center">
@@ -31,7 +29,6 @@ const ErrorBoundary = ({
   
   const handleBackClick = () => navigate(-1);
 
-  // 로딩 중 상태
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center bg-black">
@@ -40,7 +37,6 @@ const ErrorBoundary = ({
     );
   }
 
-  // 오류 발생 시
   if (error) {
     return <ErrorState message={errorMessage} onBackClick={handleBackClick} />;
   }

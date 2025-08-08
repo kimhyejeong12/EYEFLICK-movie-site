@@ -4,18 +4,19 @@ import { motion } from 'framer-motion';
 
 const BASE_PATH = "https://api.themoviedb.org/3";
 
+// 데이터 변환 헬퍼 함수들
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+const truncateText = (text, maxLength = 200) => {
+  if (!text || text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
 // 리뷰 카드 컴포넌트
 const ReviewCard = ({ review, index, expandedReviews, toggleReviewExpansion }) => {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
-
-  const truncateText = (text, maxLength = 200) => {
-    if (!text || text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
