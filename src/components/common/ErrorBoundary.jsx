@@ -1,14 +1,37 @@
 import { useNavigate } from "react-router-dom";
 
+// BackButton 컴포넌트
+const BackButton = ({ onClick, children = "뒤로 가기" }) => (
+  <button 
+    onClick={onClick}
+    className="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700"
+  >
+    {children}
+  </button>
+);
+
+// ErrorState 컴포넌트
+const ErrorState = ({ message, onBackClick }) => (
+  <div className="h-screen flex justify-center items-center bg-black text-white">
+    <div className="text-center">
+      <h2 className="text-2xl mb-4">{message}</h2>
+      <BackButton onClick={onBackClick} />
+    </div>
+  </div>
+);
+
 const ErrorBoundary = ({ 
   error, 
   isLoading, 
   children, 
-  errorMessage = "오류가 발생했습니다",
-  notFoundMessage = "데이터를 찾을 수 없습니다"
+  errorMessage = "오류가 발생했습니다", 
+  notFoundMessage = "데이터를 찾을 수 없습니다" 
 }) => {
   const navigate = useNavigate();
   
+  const handleBackClick = () => navigate(-1);
+
+  // 로딩 중 상태
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center bg-black">
@@ -16,39 +39,18 @@ const ErrorBoundary = ({
       </div>
     );
   }
-  
+
+  // 오류 발생 시
   if (error) {
-    return (
-      <div className="h-screen flex justify-center items-center bg-black text-white">
-        <div className="text-center">
-          <h2 className="text-2xl mb-4">{errorMessage}</h2>
-          <button 
-            onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700"
-          >
-            뒤로 가기
-          </button>
-        </div>
-      </div>
-    );
+    return <ErrorState message={errorMessage} onBackClick={handleBackClick} />;
   }
-  
+
+  // 데이터 없음 시
   if (!children) {
-    return (
-      <div className="h-screen flex justify-center items-center bg-black text-white">
-        <div className="text-center">
-          <h2 className="text-2xl mb-4">{notFoundMessage}</h2>
-          <button 
-            onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700"
-          >
-            뒤로 가기
-          </button>
-        </div>
-      </div>
-    );
+    return <ErrorState message={notFoundMessage} onBackClick={handleBackClick} />;
   }
-  
+
+  // 정상 시
   return children;
 };
 
