@@ -1,4 +1,4 @@
-import MediaCard from '../MediaCard';
+import MediaCard from '../common/MediaCard';
 
 function SearchResultsList({ title, items, type }) {
   if (!items || items.length === 0) {

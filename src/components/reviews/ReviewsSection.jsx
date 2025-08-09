@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useReviews } from "../../../hooks/useReviews";
+import { useReviews } from "../../hooks/useReviews";
 import ReviewCard from "./ReviewCard";
 
 const ReviewsSection = ({ data, type = "movie" }) => {
