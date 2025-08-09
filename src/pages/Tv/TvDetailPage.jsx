@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { getMovieDetail } from "../../services/api/movieApi";
+import { getTvDetail } from "../../services/api/tvApi";
 import ErrorBoundary from "../../components/common/ErrorBoundary";
 import MediaDetailLayout from "../../components/common/MediaDetailLayout";
 import MediaInfoSection from "../../components/common/MediaInfoSection";
@@ -8,28 +8,29 @@ import TrailerSection from "../../components/common/TrailerSection";
 import ReviewsSection from "../../components/common/reviews/ReviewsSection";
 import RecommendationsSection from "../../components/common/RecommendationsSection";
 
-const MovieDetail = () => {
-  const { movieId } = useParams();
+const TvDetailPage = () => {
+  const { tvId } = useParams();
   
-  const { data: movieData, isLoading, error } = useQuery(
-    ["movieDetail", movieId],
-    () => getMovieDetail(movieId)
+  const { data: tvData, isLoading, error } = useQuery(
+    ["tvDetail", tvId],
+    () => getTvDetail(tvId)
   );
 
   return (
     <ErrorBoundary 
       isLoading={isLoading} 
       error={error}
-      notFoundMessage="영화를 찾을 수 없습니다"
+      notFoundMessage="TV 프로그램을 찾을 수 없습니다"
     >
-      <MediaDetailLayout data={movieData} type="movie">
-        <MediaInfoSection data={movieData} type="movie" />
-        <TrailerSection data={movieData} type="movie" />
-        <ReviewsSection data={movieData} type="movie" />
-        <RecommendationsSection data={movieData} type="movie" />
+      <MediaDetailLayout data={tvData} type="tv">
+        <MediaInfoSection data={tvData} type="tv" />
+        <TrailerSection data={tvData} type="tv" />
+        <ReviewsSection data={tvData} type="tv" />
+        <RecommendationsSection data={tvData} type="tv" />
       </MediaDetailLayout>
     </ErrorBoundary>
   );
 };
 
-export default MovieDetail;
+export default TvDetailPage;
+
