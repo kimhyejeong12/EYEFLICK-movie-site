@@ -8,3 +8,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 );
+
+// Ensure initial load or hard refresh starts at the very top (header + banner visible)
+window.requestAnimationFrame(() => {
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+});
