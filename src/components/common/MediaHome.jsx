@@ -54,7 +54,6 @@ const MediaHome = ({ type = "movie" }) => {
             isOpen={!!bigMatch}
             onClose={bannerLogic.onOverlayClick}
             item={clickedItem}
-            layoutId={bigMatch?.params.id}
             type={clickedItem?.name ? "tv" : "movie"}
           />
         </AnimatePresence>
