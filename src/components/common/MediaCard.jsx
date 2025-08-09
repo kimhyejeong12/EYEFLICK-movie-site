@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { getImageUrl } from "../../utils/imageUtils";
 
-const MediaCard = ({ item, type = "movie" }) => {
+const MediaCard = ({ item, type = "movie", dimOnHover = true }) => {
   const getTitle = () => type === "tv" ? item.name : item.title;
   const getDate = () => type === "tv" ? item.first_air_date : item.release_date;
   const getLink = () => type === "tv" ? `/tv-detail/${item.id}` : `/movie/${item.id}`;
@@ -18,10 +18,10 @@ const MediaCard = ({ item, type = "movie" }) => {
       />
       
       {/* 호버 오버레이 */}
-      <div 
-        className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 
+      <div
+        className={`absolute inset-0 bg-black bg-opacity-0 ${dimOnHover ? 'group-hover:bg-opacity-60' : 'group-hover:bg-opacity-0'} 
                    transition-all duration-300 flex flex-col justify-end p-4 
-                   transform translate-y-full group-hover:translate-y-0"
+                   transform translate-y-full group-hover:translate-y-0`}
       >
         <h3 className="text-white font-semibold text-sm mb-2 line-clamp-2">
           {getTitle()}
