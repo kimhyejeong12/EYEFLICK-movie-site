@@ -10,7 +10,7 @@ const ReviewsSection = ({ data, type = "movie" }) => {
   const itemId = data?.id;
   const existingReviews = data?.reviews?.results || [];
 
-  const { data: fetchedReviews = [], isLoading, error } = useReviews({
+  const { reviews: fetchedReviews = [], isLoading, error } = useReviews({
     itemId,
     type,
     existingReviews,
