@@ -5,7 +5,7 @@ import ErrorBoundary from "../../components/common/ErrorBoundary";
 import MediaDetailLayout from "../../components/common/MediaDetailLayout";
 import MediaInfoSection from "../../components/common/MediaInfoSection";
 import TrailerSection from "../../components/common/TrailerSection";
-import ReviewsSection from "../../components/common/ReviewsSection";
+import ReviewsSection from "../../components/common/reviews/ReviewsSection";
 import RecommendationsSection from "../../components/common/RecommendationsSection";
 
 const MovieDetail = () => {
