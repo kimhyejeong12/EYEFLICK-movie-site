@@ -12,7 +12,7 @@ export const useMediaFeed = () => {
 
   const isHomePage = location.pathname === "/";
 
-  // 카테고리 결정을 단순화: useParams에서 받은 type을 그대로 사용
+  // 카테고리 결정 단순화:
   const category = routeCategory || (normalizedType === "tv" ? "popular" : "now_playing");
 
   // 홈 병렬 쿼리
@@ -58,7 +58,7 @@ export const useMediaFeed = () => {
     () => (normalizedType === "tv" ? getTvByCategory(category) : getMoviesByCategory(category)),
     { enabled: !isHomePage }
   );
-
+  //최종 결과 반환 로직 통합
   const finalData = isHomePage ? shuffledData : categoryData;
   const finalLoading = isHomePage ? Boolean(movieLoading || tvLoading) : categoryLoading;
   const finalCategory = isHomePage ? "home" : category;
