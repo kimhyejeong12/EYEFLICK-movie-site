@@ -31,10 +31,9 @@ function App() {
           <main className="flex-1">
             <Routes>
               <Route path='/' element={<Home />} />
-              <Route path='movies/:category' element={<Home />} />
+              <Route path='/:type/:category' element={<Home />} />
               <Route path="/movie/:movieId" element={<MovieDetail />} />
               <Route path="/search" element={<SearchResults />} />
-              <Route path="/tv/:category" element={<Home />} />
               <Route path="/tv-detail/:tvId" element={<TvDetail />} />
             </Routes>
           </main>

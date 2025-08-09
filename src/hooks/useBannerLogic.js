@@ -36,7 +36,9 @@ export const useBannerLogic = (data, type = "movie") => {
   const onOverlayClick = () => {
     const category = type === "tv" ? "popular" : "now_playing";
     if (type === "tv") {
-      navigate("/tv");
+      navigate(`/tv/${category}`);
+    } else if (type === "movie") {
+      navigate(`/movies/${category}`);
     } else {
       navigate("/");
     }
