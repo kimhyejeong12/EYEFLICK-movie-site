@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import { useMediaData, useHomeData } from "../../hooks/useMediaData";
+import { useMediaFeed } from "../../hooks/useMediaFeed";
 import { useBannerLogic } from "../../hooks/useBannerLogic";
 import ErrorBoundary from "./ErrorBoundary";
 import MediaGrid from "./MediaGrid";
@@ -13,17 +13,13 @@ const MediaHome = ({ type = "movie" }) => {
   // 홈 페이지인지 확인
   const isHomePage = location.pathname === '/';
   
-  // 데이터 가져오기
-  const homeData = useHomeData();
-  const mediaData = useMediaData(type, type === "tv" ? "popular" : "now_playing");
+  // 통합 데이터 훅 사용
+  const { data, isLoading, category: resolvedCategory, type: resolvedType } = useMediaFeed();
   
-  const { data, isLoading } = isHomePage ? homeData : mediaData;
-  const { category } = mediaData;
-  
-  const bannerLogic = useBannerLogic(data, isHomePage ? "mixed" : type);
+  const bannerLogic = useBannerLogic(data, isHomePage ? "mixed" : resolvedType);
   
   // URL에서 ID 파라미터 추출
-  const idMatch = location.pathname.match(new RegExp(`/${type === "tv" ? "tv" : "movies"}/(\\d+)`));
+  const idMatch = location.pathname.match(new RegExp(`/${resolvedType === "tv" ? "tv-detail" : "movie"}/(\\d+)`));
   const bigMatch = idMatch ? { params: { id: idMatch[1] } } : null;
   
   const clickedItem = bigMatch?.params.id && 
@@ -40,7 +36,7 @@ const MediaHome = ({ type = "movie" }) => {
           onBoxClicked={bannerLogic.onBoxClicked}
           onToggleLeaving={bannerLogic.toggleLeaving}
           offset={bannerLogic.offset}
-          type={isHomePage ? "mixed" : type}
+          type={isHomePage ? "mixed" : resolvedType}
         />
         
         {/* 그리드 섹션 */}
@@ -50,7 +46,7 @@ const MediaHome = ({ type = "movie" }) => {
             <MediaGrid category="popular" type="tv" title="인기 TV 프로그램" />
           </div>
         ) : (
-          <MediaGrid category={category} type={type} />
+          <MediaGrid category={resolvedCategory} type={resolvedType} />
         )}
         
         <AnimatePresence>
