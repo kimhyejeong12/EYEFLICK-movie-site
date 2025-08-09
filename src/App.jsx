@@ -3,10 +3,10 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { useEffect } from 'react';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
-import Home from './pages/Home/Home';
-import MovieDetail from './pages/Movie/MovieDetail';
-import SearchResults from './pages/Search/SearchResults';
-import TvDetail from './pages/Tv/TvDetail';
+import HomePage from './pages/Home/HomePage';
+import MovieDetailPage from './pages/Movie/MovieDetailPage';
+import SearchResultsPage from './pages/Search/SearchResultsPage';
+import TvDetailPage from './pages/Tv/TvDetailPage';
 
 const queryClient = new QueryClient();
 
@@ -30,11 +30,11 @@ function App() {
           <Header />
           <main className="flex-1">
             <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/:type/:category' element={<Home />} />
-              <Route path="/movie/:movieId" element={<MovieDetail />} />
-              <Route path="/search" element={<SearchResults />} />
-              <Route path="/tv-detail/:tvId" element={<TvDetail />} />
+              <Route path='/' element={<HomePage />} />
+              <Route path='/:type/:category' element={<HomePage />} />
+              <Route path="/movie/:movieId" element={<MovieDetailPage />} />
+              <Route path="/search" element={<SearchResultsPage />} />
+              <Route path="/tv-detail/:tvId" element={<TvDetailPage />} />
             </Routes>
           </main>
           <Footer />

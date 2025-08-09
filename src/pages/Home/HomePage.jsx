@@ -1,7 +1,8 @@
 import MediaHome from "../../components/common/MediaHome";
 
-const Home = () => {
+const HomePage = () => {
   return <MediaHome />;
 };
 
-export default Home;
+export default HomePage;
+

@@ -3,31 +3,24 @@ import { useSearchResults } from '../../hooks/useSearchResults';
 import ErrorBoundary from '../../components/common/ErrorBoundary';
 import SearchResultsView from '../../components/common/Search/SearchResultsView';
 
-function SearchResults() {
+function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
 
   const { movies, tvShows, isLoading, error } = useSearchResults(keyword);
 
-  // 키워드가 없을 때
   if (!keyword) {
     return (
       <div className="min-h-screen bg-black pt-20">
         <div className="container mx-auto px-4">
           <div className="text-center py-20">
-            <h1 className="text-3xl font-bold text-white mb-4">
-              영화 & TV 프로그램 검색
-            </h1>
-            <p className="text-gray-400 mb-8">
-              검색창에서 영화나 TV 프로그램 제목을 입력해주세요.
-            </p>
+            <h1 className="text-3xl font-bold text-white mb-4">영화 & TV 프로그램 검색</h1>
+            <p className="text-gray-400 mb-8">검색창에서 영화나 TV 프로그램 제목을 입력해주세요.</p>
           </div>
         </div>
       </div>
     );
   }
-
-  
 
   return (
     <ErrorBoundary 
@@ -40,4 +33,5 @@ function SearchResults() {
   );
 }
 
-export default SearchResults;
+export default SearchResultsPage;
+
