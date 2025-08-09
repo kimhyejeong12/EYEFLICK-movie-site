@@ -3,7 +3,7 @@ import { motion, useAnimation, useScroll } from "framer-motion";
 import { useEffect } from "react";
 import NavButton from "./NavButton";
 import EyeIcon from "./EyeIcon";
-import SearchBar from "./Search/SearchBar";
+import SearchBar from "../Search/SearchBar";
 
 const navItems = [
   { label: '홈', path: '/' },

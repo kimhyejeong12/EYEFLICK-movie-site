@@ -4,7 +4,7 @@ import { useMediaFeed } from "../../hooks/useMediaFeed";
 import { useBannerLogic } from "../../hooks/useBannerLogic";
 import ErrorBoundary from "./ErrorBoundary";
 import MediaGrid from "./MediaGrid";
-import MediaBanner from "./MediaBanner";
+import MediaBanner from "../Banner/MediaBanner";
 import MediaModal from "./MediaModal";
 
 const MediaHome = ({ type = "movie" }) => {

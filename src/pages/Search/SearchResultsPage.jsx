@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import { useSearchResults } from '../../hooks/useSearchResults';
 import ErrorBoundary from '../../components/common/ErrorBoundary';
-import SearchResultsView from '../../components/common/Search/SearchResultsView';
+import SearchResultsView from '../../components/Search/SearchResultsView';
 
 function SearchResultsPage() {
   const [searchParams] = useSearchParams();
