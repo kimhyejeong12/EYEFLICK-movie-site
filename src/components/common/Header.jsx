@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion, useAnimation, useScroll } from "framer-motion";
 import { useEffect } from "react";
 import NavButton from "./NavButton";
@@ -15,7 +15,6 @@ const navItems = [
 ];
 
 function Header() {
-  const location = useLocation();
   const navigate = useNavigate();
   const navAnimation = useAnimation();
   const { scrollY } = useScroll();
