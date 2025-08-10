@@ -106,3 +106,6 @@ src/
 ## 개발자
 
 [kimhyejeong12](https://github.com/kimhyejeong12)
+
+
+.배포중 오류 수정
