@@ -12,7 +12,6 @@ export const useMediaFeed = () => {
 
   const isHomePage = location.pathname === "/";
 
-  // 카테고리 결정 단순화
   const category = routeCategory || (normalizedType === "tv" ? "popular" : "now_playing");
 
   // 홈 병렬 쿼리

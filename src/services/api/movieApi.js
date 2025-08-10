@@ -1,7 +1,7 @@
 import { fetcher } from './apiClient.js';
 
 /**
- * 카테고리별 영화 목록을 가져옵니다.
+ * 카테고리별 영화 목록
  */
 export function getMoviesByCategory(category, page = 1) {
   const validCategory = ['popular', 'top_rated', 'now_playing'].includes(category) ? category : 'now_playing';
@@ -9,15 +9,14 @@ export function getMoviesByCategory(category, page = 1) {
 }
 
 /**
- * 영화를 검색합니다.
+ * 영화 검색
  */
 export function searchMovies(query) {
   return fetcher("/search/movie", { query });
 }
 
 /**
- * 영화의 상세 정보를 가져옵니다.
- * 관련 비디오, 출연진, 비슷한 콘텐츠, 추천 콘텐츠, 리뷰를 함께 가져옵니다.
+ * 영화의 상세 정보
  */
 export function getMovieDetail(movieId) {
   const params = {

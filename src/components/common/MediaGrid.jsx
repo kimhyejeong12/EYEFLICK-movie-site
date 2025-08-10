@@ -8,7 +8,6 @@ import MediaCard from "./MediaCard";
 const MediaGrid = ({ category, title, page = 1, onPageChange, type = "movie", showPagination = true }) => {
   const [currentPage, setCurrentPage] = useState(page);
   
-  // 카테고리별 제목 매핑
   const movieCategoryTitles = {
     'popular': '인기 영화',
     'top_rated': '평점 높은 영화',

@@ -10,7 +10,6 @@ import MediaModal from "./MediaModal";
 const MediaHome = ({ type = "movie" }) => {
   const location = useLocation();
   
-  // 홈 페이지인지 확인
   const isHomePage = location.pathname === '/';
   
   // 통합 데이터 훅 사용

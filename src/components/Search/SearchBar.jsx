@@ -21,7 +21,7 @@ function SearchBar() {
     e.preventDefault();
     if (keyword.trim()) {
       navigate(`/search?keyword=${encodeURIComponent(keyword.trim())}`);
-      setIsSearchOpen(false); // 검색 후 창이 닫히면서 아래 useEffect가 실행되어 keyword가 초기화됩니다.
+      setIsSearchOpen(false); 
     }
   };
 
@@ -47,7 +47,6 @@ function SearchBar() {
     };
   }, [isSearchOpen]);
 
-  // 👇 [추가된 부분] 검색창이 닫힐 때마다 검색어를 초기화하는 로직
   useEffect(() => {
     if (!isSearchOpen) {
       setKeyword("");
