@@ -1,15 +1,16 @@
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const BASE_PATH = "https://api.themoviedb.org/3";
+import { fetcher } from './apiClient.js';
 
-export function getMovieReviews(movieId, language = "ko-KR", page = 1) {
-  return fetch(`${BASE_PATH}/movie/${movieId}/reviews?api_key=${API_KEY}&language=${language}&page=${page}`).then(
-    (response) => response.json()
-  );
+/**
+ * 영화의 리뷰를 가져옵니다.
+ */
+export function getMovieReviews(movieId, page = 1) {
+  return fetcher(`/movie/${movieId}/reviews`, { page });
 }
 
-export function getTvReviews(tvId, language = "ko-KR", page = 1) {
-  return fetch(`${BASE_PATH}/tv/${tvId}/reviews?api_key=${API_KEY}&language=${language}&page=${page}`).then(
-    (response) => response.json()
-  );
+/**
+ * TV 프로그램의 리뷰를 가져옵니다.
+ */
+export function getTvReviews(tvId, page = 1) {
+  return fetcher(`/tv/${tvId}/reviews`, { page });
 }
 

@@ -1,24 +1,27 @@
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const BASE_PATH = "https://api.themoviedb.org/3";
+import { fetcher } from './apiClient.js';
 
+/**
+ * 카테고리별 영화 목록을 가져옵니다.
+ */
 export function getMoviesByCategory(category, page = 1) {
-  const endpoints = {
-    popular: () => fetch(`${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko-KR&page=${page}`).then(response => response.json()),
-    top_rated: () => fetch(`${BASE_PATH}/movie/top_rated?api_key=${API_KEY}&language=ko-KR&page=${page}`).then(response => response.json()),
-    now_playing: () => fetch(`${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=${page}`).then(response => response.json())
-  };
-  
-  return endpoints[category] ? endpoints[category]() : endpoints.now_playing();
+  const validCategory = ['popular', 'top_rated', 'now_playing'].includes(category) ? category : 'now_playing';
+  return fetcher(`/movie/${validCategory}`, { page });
 }
 
+/**
+ * 영화를 검색합니다.
+ */
 export function searchMovies(query) {
-  return fetch(`${BASE_PATH}/search/movie?api_key=${API_KEY}&language=ko-KR&query=${encodeURIComponent(query)}`).then(
-    (response) => response.json()
-  );
+  return fetcher("/search/movie", { query });
 }
 
+/**
+ * 영화의 상세 정보를 가져옵니다.
+ * 관련 비디오, 출연진, 비슷한 콘텐츠, 추천 콘텐츠, 리뷰를 함께 가져옵니다.
+ */
 export function getMovieDetail(movieId) {
-  return fetch(`${BASE_PATH}/movie/${movieId}?api_key=${API_KEY}&language=ko&append_to_response=videos,credits,similar,recommendations,reviews`).then(
-    (response) => response.json()
-  );
+  const params = {
+    append_to_response: "videos,credits,similar,recommendations,reviews",
+  };
+  return fetcher(`/movie/${movieId}`, params);
 }

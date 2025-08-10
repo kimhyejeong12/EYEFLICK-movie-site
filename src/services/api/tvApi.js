@@ -1,53 +1,27 @@
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const BASE_PATH = "https://api.themoviedb.org/3";
+import { fetcher } from './apiClient.js';
 
+/**
+ * 카테고리별 TV 프로그램 목록을 가져옵니다.
+ */
 export function getTvByCategory(category, page = 1) {
-  const endpoints = {
-    popular: () => fetch(`${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&page=${page}`).then(response => response.json()),
-    top_rated: () => fetch(`${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&page=${page}`).then(response => response.json())
-  };
-  
-  return endpoints[category] ? endpoints[category]() : endpoints.popular();
+  const validCategory = ['popular', 'top_rated'].includes(category) ? category : 'popular';
+  return fetcher(`/tv/${validCategory}`, { page });
 }
 
+/**
+ * TV 프로그램을 검색합니다.
+ */
 export function searchTv(query) {
-  return fetch(`${BASE_PATH}/search/tv?api_key=${API_KEY}&language=ko-KR&query=${encodeURIComponent(query)}`).then(
-    (response) => response.json()
-  );
+  return fetcher("/search/tv", { query });
 }
 
+/**
+ * TV 프로그램의 상세 정보를 가져옵니다.
+ * 관련 비디오, 출연진, 비슷한 콘텐츠, 추천 콘텐츠, 리뷰를 함께 가져옵니다.
+ */
 export function getTvDetail(tvId) {
-  return fetch(`${BASE_PATH}/tv/${tvId}?api_key=${API_KEY}&language=ko-KR&append_to_response=videos,credits,similar,recommendations,reviews`).then(
-    (response) => response.json()
-  );
-}
-
-export function getTvTrailers(tvId) {
-  return fetch(`${BASE_PATH}/tv/${tvId}/videos?api_key=${API_KEY}&language=ko-KR`).then(
-    (response) => response.json()
-  );
-}
-
-export function getTvCredits(tvId) {
-  return fetch(`${BASE_PATH}/tv/${tvId}/credits?api_key=${API_KEY}&language=ko-KR`).then(
-    (response) => response.json()
-  );
-}
-
-export function getSimilarTv(tvId) {
-  return fetch(`${BASE_PATH}/tv/${tvId}/similar?api_key=${API_KEY}&language=ko-KR`).then(
-    (response) => response.json()
-  );
-}
-
-export function getTvRecommendations(tvId) {
-  return fetch(`${BASE_PATH}/tv/${tvId}/recommendations?api_key=${API_KEY}&language=ko-KR`).then(
-    (response) => response.json()
-  );
-}
-
-export function getTvReviews(tvId) {
-  return fetch(`${BASE_PATH}/tv/${tvId}/reviews?api_key=${API_KEY}&language=ko-KR`).then(
-    (response) => response.json()
-  );
+  const params = {
+    append_to_response: "videos,credits,similar,recommendations,reviews",
+  };
+  return fetcher(`/tv/${tvId}`, params);
 }

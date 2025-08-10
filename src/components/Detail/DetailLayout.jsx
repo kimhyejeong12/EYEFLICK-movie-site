@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { mapMediaData } from "../../utils/mediaDataMapper";
 import { detailPageVariants as variants } from "../../utils/animations";
-
 import PrimaryDetails from "../../components/Detail/PrimaryDetails";
 
 const MediaDetailLayout = ({ data, type = "movie", children }) => {
