@@ -2,11 +2,11 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getTvDetail } from "../../services/api/tvApi";
 import ErrorBoundary from "../../components/common/ErrorBoundary";
-import MediaDetailLayout from "../../components/common/MediaDetailLayout";
-import MediaInfoSection from "../../components/common/MediaInfoSection";
-import TrailerSection from "../../components/common/TrailerSection";
+import DetailLayout from "../../components/Detail/DetailLayout";
+import InfoSection from "../../components/Detail/InfoSection";
+import TrailerSection from "../../components/Detail/TrailerSection";
 import ReviewsSection from "../../components/Reviews/ReviewsSection";
-import RecommendationsSection from "../../components/common/RecommendationsSection";
+import RecommendationsSection from "../../components/Detail/RecommendationsSection";
 
 const TvDetailPage = () => {
   const { tvId } = useParams();
@@ -22,12 +22,12 @@ const TvDetailPage = () => {
       error={error}
       notFoundMessage="TV 프로그램을 찾을 수 없습니다"
     >
-      <MediaDetailLayout data={tvData} type="tv">
-        <MediaInfoSection data={tvData} type="tv" />
+      <DetailLayout data={tvData} type="tv">
+        <InfoSection data={tvData} type="tv" />
         <TrailerSection data={tvData} type="tv" />
         <ReviewsSection data={tvData} type="tv" />
         <RecommendationsSection data={tvData} type="tv" />
-      </MediaDetailLayout>
+      </DetailLayout>
     </ErrorBoundary>
   );
 };

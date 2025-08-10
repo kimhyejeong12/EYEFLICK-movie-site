@@ -2,11 +2,11 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getMovieDetail } from "../../services/api/movieApi";
 import ErrorBoundary from "../../components/common/ErrorBoundary";
-import MediaDetailLayout from "../../components/common/MediaDetailLayout";
-import MediaInfoSection from "../../components/common/MediaInfoSection";
-import TrailerSection from "../../components/common/TrailerSection";
+import DetailLayout from "../../components/Detail/DetailLayout";
+import InfoSection from "../../components/Detail/InfoSection";
+import TrailerSection from "../../components/Detail/TrailerSection";
 import ReviewsSection from "../../components/Reviews/ReviewsSection";
-import RecommendationsSection from "../../components/common/RecommendationsSection";
+import RecommendationsSection from "../../components/Detail/RecommendationsSection";
 
 const MovieDetailPage = () => {
   const { movieId } = useParams();
@@ -22,12 +22,12 @@ const MovieDetailPage = () => {
       error={error}
       notFoundMessage="영화를 찾을 수 없습니다"
     >
-      <MediaDetailLayout data={movieData} type="movie">
-        <MediaInfoSection data={movieData} type="movie" />
+      <DetailLayout data={movieData} type="movie">
+        <InfoSection data={movieData} type="movie" />
         <TrailerSection data={movieData} type="movie" />
         <ReviewsSection data={movieData} type="movie" />
         <RecommendationsSection data={movieData} type="movie" />
-      </MediaDetailLayout>
+      </DetailLayout>
     </ErrorBoundary>
   );
 };

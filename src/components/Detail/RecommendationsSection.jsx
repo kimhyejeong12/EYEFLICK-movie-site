@@ -1,4 +1,4 @@
-import MediaCard from './MediaCard';
+import MediaCard from '../common/MediaCard';
 
 const RecommendationsSection = ({ data, type = "movie" }) => {
   const recommendations = data?.recommendations?.results || data?.similar?.results || [];
